@@ -12,7 +12,8 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {productsReducer} from './ngrx/products.reducer';
 import {ProductsEffects} from './ngrx/products.effects';
 import { ProductsListComponent } from './components/products/products-list/products-list.component';
-import { PrdouctItemComponent } from './components/products/products-list/prdouct-item/prdouct-item.component';
+import { ProductItemComponent } from './components/products/products-list/product-item/product-item.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // @ts-ignore
 @NgModule({
@@ -21,7 +22,7 @@ import { PrdouctItemComponent } from './components/products/products-list/prdouc
     ProductsComponent,
     ProductsNavBarComponent,
     ProductsListComponent,
-    PrdouctItemComponent
+    ProductItemComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +30,9 @@ import { PrdouctItemComponent } from './components/products/products-list/prdouc
     HttpClientModule,
     StoreModule.forRoot({catalogState:productsReducer}),
     EffectsModule.forRoot([ProductsEffects]),
-    StoreDevtoolsModule.instrument()
+    StoreDevtoolsModule.instrument(),
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

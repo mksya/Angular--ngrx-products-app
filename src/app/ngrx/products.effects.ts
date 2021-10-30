@@ -8,7 +8,9 @@ import {
   GetAllProductsActionSuccess, GetSelectedProductsActionError,
   GetSelectedProductsActionSuccess,
   ProductsActions,
-  ProductsActionsTypes
+  ProductsActionsTypes,
+  SearchProductsActionError,
+  SearchProductsActionSuccess
 } from './products.actions';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 
@@ -17,10 +19,10 @@ export class ProductsEffects {
   constructor(private productService:ProductService, private effectActions:Actions) {
   }
 
-  getAllProductsEffect:Observable<Action>=createEffect(
+  getAllProductsEffect:Observable<ProductsActions>=createEffect(
     ()=>this.effectActions.pipe(
       ofType(ProductsActionsTypes.GET_ALL_PRODUCTS),
-      mergeMap((action)=>{
+      mergeMap((action:ProductsActions)=>{
             return this.productService.getProducts()
               .pipe(
                 map((products)=> new GetAllProductsActionSuccess(products)),
@@ -30,11 +32,11 @@ export class ProductsEffects {
     )
   );
 
-  /* Get Selected Products*/
-  getSelectedProductsEffect:Observable<Action>=createEffect(
+  /* Get Selected Products Effect*/
+  getSelectedProductsEffect:Observable<ProductsActions>=createEffect(
     ()=>this.effectActions.pipe(
       ofType(ProductsActionsTypes.GET_SELECTED_PRODUCTS),
-      mergeMap((action)=>{
+      mergeMap((action:ProductsActions)=>{
         return this.productService.getSelectedProducts()
           .pipe(
             map((products)=> new GetSelectedProductsActionSuccess(products)),
@@ -43,5 +45,20 @@ export class ProductsEffects {
       })
     )
   );
+
+  /* Search Products Effect*/
+  searchProductsEffect:Observable<ProductsActions>=createEffect(
+    ()=>this.effectActions.pipe(
+      ofType(ProductsActionsTypes.SEARCH_PRODUCTS),
+      mergeMap((action:ProductsActions)=>{
+        return this.productService.searchProducts(action.payload)
+          .pipe(
+            map((products)=> new SearchProductsActionSuccess(products)),
+            catchError((err)=>of(new SearchProductsActionError(err.message)))
+          )
+      })
+    )
+  );
+
 
 }
