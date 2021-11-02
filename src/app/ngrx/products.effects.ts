@@ -4,13 +4,20 @@ import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {Observable, of} from 'rxjs';
 import {Action} from '@ngrx/store';
 import {
+  DeleteProductActionError,
+  DeleteProductActionSuccess,
   GetAllProductsActionError,
   GetAllProductsActionSuccess, GetSelectedProductsActionError,
   GetSelectedProductsActionSuccess,
+  NewProductActionSuccess,
   ProductsActions,
   ProductsActionsTypes,
+  SaveProductActionError,
+  SaveProductActionSuccess,
   SearchProductsActionError,
-  SearchProductsActionSuccess
+  SearchProductsActionSuccess,
+  SelectProductActionError,
+  SelectProductActionSuccess
 } from './products.actions';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 
@@ -60,5 +67,57 @@ export class ProductsEffects {
     )
   );
 
+  /* Select Product Effect*/
+  selectProductEffect:Observable<ProductsActions>=createEffect(
+    ()=>this.effectActions.pipe(
+      ofType(ProductsActionsTypes.SELECT_PRODUCT),
+      mergeMap((action:ProductsActions)=>{
+        return this.productService.setSelected(action.payload)
+          .pipe(
+            map((product)=> new SelectProductActionSuccess(product)),
+            catchError((err)=>of(new SelectProductActionError(err.message)))
+          )
+      })
+    )
+  );
+
+   /* Delete Product Effect*/
+   deleteProductEffect:Observable<ProductsActions>=createEffect(
+    ()=>this.effectActions.pipe(
+      ofType(ProductsActionsTypes.DELETE_PRODUCT),
+      mergeMap((action:ProductsActions)=>{
+        return this.productService.delete(action.payload.id)
+          .pipe(
+            map(()=> new DeleteProductActionSuccess(action.payload)),
+            catchError((err)=>of(new DeleteProductActionError(err.message)))
+          )
+      })
+    )
+  );
+
+  /* New Product Effect*/
+  newProductEffect:Observable<ProductsActions>=createEffect(
+    ()=>this.effectActions.pipe(
+      ofType(ProductsActionsTypes.NEW_PRODUCT),
+      map((action:ProductsActions)=>{
+        return new NewProductActionSuccess({}); 
+  
+      })
+    )
+  );
+
+   /* Save Product Effect*/
+   saveProductEffect:Observable<ProductsActions>=createEffect(
+    ()=>this.effectActions.pipe(
+      ofType(ProductsActionsTypes.SAVE_PRODUCT),
+      mergeMap((action:ProductsActions)=>{
+        return this.productService.save(action.payload)
+          .pipe(
+            map((product)=> new SaveProductActionSuccess(product)),
+            catchError((err)=>of(new SaveProductActionError(err.message)))
+          )
+      })
+    )
+  );
 
 }

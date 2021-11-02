@@ -6,7 +6,9 @@ export enum ProductsStateEnum{
   LOADING="Loading",
   LOADED="Loaded",
   ERROR="Error",
-  INITIAL="Initial"
+  INITIAL="Initial",
+  NEW="NEW",
+  EDIT="EDIT",
 }
 export interface ProductsState{
     products:Product[],
@@ -41,6 +43,43 @@ export function productsReducer(state=initState, action:Action):ProductsState {
     case ProductsActionsTypes.SEARCH_PRODUCTS_SUCCESS:
       return {...state, dataState:ProductsStateEnum.LOADED, products:(<ProductsActions>action).payload}
     case ProductsActionsTypes.SEARCH_PRODUCTS_ERROR:
+      return {...state, dataState:ProductsStateEnum.ERROR, errorMessage:(<ProductsActions>action).payload}
+      /* Select Product*/
+    case ProductsActionsTypes.SELECT_PRODUCT:
+      return {...state, dataState:ProductsStateEnum.LOADING }
+    case ProductsActionsTypes.SELECT_PRODUCT_SUCCESS:
+      let product:Product=(<ProductsActions>action).payload
+      let listProducts=[...state.products];
+      let data:Product[]= listProducts.map(p=>p.id==product.id?product:p);
+      return {...state, dataState:ProductsStateEnum.LOADED, products:data}
+    case ProductsActionsTypes.SELECT_PRODUCT_ERROR:
+      return {...state, dataState:ProductsStateEnum.ERROR, errorMessage:(<ProductsActions>action).payload}
+        /* Delete Product*/
+    case ProductsActionsTypes.DELETE_PRODUCT:
+      return {...state, dataState:ProductsStateEnum.LOADING }
+    case ProductsActionsTypes.DELETE_PRODUCT_SUCCESS:
+      let p:Product=(<ProductsActions>action).payload
+      let index=state.products.indexOf(p);
+      let productsList=[...state.products];
+      productsList.splice(index,1);
+      return {...state, dataState:ProductsStateEnum.LOADED, products:productsList}
+    case ProductsActionsTypes.DELETE_PRODUCT_ERROR:
+      return {...state, dataState:ProductsStateEnum.ERROR, errorMessage:(<ProductsActions>action).payload}
+      /* New Product*/
+    case ProductsActionsTypes.NEW_PRODUCT:
+      return {...state, dataState:ProductsStateEnum.LOADING }
+    case ProductsActionsTypes.NEW_PRODUCT_SUCCESS:
+      return {...state, dataState:ProductsStateEnum.NEW}
+    case ProductsActionsTypes.NEW_PRODUCT_ERROR:
+      return {...state, dataState:ProductsStateEnum.ERROR, errorMessage:(<ProductsActions>action).payload}
+       /* Save Product*/
+    case ProductsActionsTypes.SAVE_PRODUCT:
+      return {...state, dataState:ProductsStateEnum.LOADING }
+    case ProductsActionsTypes.SAVE_PRODUCT_SUCCESS:
+      let prods:Product[]=[...state.products];
+      prods.push((<ProductsActions>action).payload);
+      return {...state, dataState:ProductsStateEnum.LOADED,products:prods}
+    case ProductsActionsTypes.SAVE_PRODUCT_ERROR:
       return {...state, dataState:ProductsStateEnum.ERROR, errorMessage:(<ProductsActions>action).payload}
     default : return {...state}
   }
