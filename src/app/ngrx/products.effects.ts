@@ -6,6 +6,8 @@ import {Action} from '@ngrx/store';
 import {
   DeleteProductActionError,
   DeleteProductActionSuccess,
+  EditProductActionError,
+  EditProductActionSuccess,
   GetAllProductsActionError,
   GetAllProductsActionSuccess, GetSelectedProductsActionError,
   GetSelectedProductsActionSuccess,
@@ -17,7 +19,9 @@ import {
   SearchProductsActionError,
   SearchProductsActionSuccess,
   SelectProductActionError,
-  SelectProductActionSuccess
+  SelectProductActionSuccess,
+  UpdateProductActionError,
+  UpdateProductActionSuccess
 } from './products.actions';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 
@@ -119,5 +123,33 @@ export class ProductsEffects {
       })
     )
   );
+
+     /* Edit Product Effect*/
+     editProductEffect:Observable<ProductsActions>=createEffect(
+      ()=>this.effectActions.pipe(
+        ofType(ProductsActionsTypes.EDIT_PRODUCT),
+        mergeMap((action:ProductsActions)=>{
+          return this.productService.getProductById(action.payload)
+            .pipe(
+              map((product)=> new EditProductActionSuccess(product)),
+              catchError((err)=>of(new EditProductActionError(err.message)))
+            )
+        })
+      )
+    );
+
+      /* Update Product Effect*/
+      updateProductEffect:Observable<ProductsActions>=createEffect(
+        ()=>this.effectActions.pipe(
+          ofType(ProductsActionsTypes.UPDATE_PRODUCT),
+          mergeMap((action:ProductsActions)=>{
+            return this.productService.update(action.payload)
+              .pipe(
+                map((product)=> new UpdateProductActionSuccess(product)),
+                catchError((err)=>of(new UpdateProductActionError(err.message)))
+              )
+          })
+        )
+      );
 
 }

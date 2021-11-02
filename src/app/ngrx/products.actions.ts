@@ -37,6 +37,15 @@ export enum ProductsActionsTypes{
      SAVE_PRODUCT_SUCCESS="[Product] Save product Success",
      SAVE_PRODUCT_ERROR="[Product] Save product Error",
  
+    /* EDIT product*/
+    EDIT_PRODUCT="[Product] Edit product",
+    EDIT_PRODUCT_SUCCESS="[Product] Edit product Success",
+    EDIT_PRODUCT_ERROR="[Product] Edit product Error",
+
+    /* UPDATE product*/
+    UPDATE_PRODUCT="[Product] Update product",
+    UPDATE_PRODUCT_SUCCESS="[Product] Update product Success",
+    UPDATE_PRODUCT_ERROR="[Product] Update product Error",
 
 }
 
@@ -178,6 +187,46 @@ export class SaveProductActionError implements Action{
   }
 }
 
+/* Edit Product Actions*/
+
+export class EditProductAction implements Action{
+  type: ProductsActionsTypes=ProductsActionsTypes.EDIT_PRODUCT;
+  constructor(public payload:number) {
+  }
+}
+
+export class EditProductActionSuccess implements Action{
+  type: ProductsActionsTypes=ProductsActionsTypes.EDIT_PRODUCT_SUCCESS;
+  constructor(public payload:Product) {
+  }
+}
+
+export class EditProductActionError implements Action{
+  type: ProductsActionsTypes=ProductsActionsTypes.EDIT_PRODUCT_ERROR;
+  constructor(public payload:string) {
+  }
+}
+
+/* Update Product Actions*/
+
+export class UpdateProductAction implements Action{
+  type: ProductsActionsTypes=ProductsActionsTypes.UPDATE_PRODUCT;
+  constructor(public payload:Product) {
+  }
+}
+
+export class UpdateProductActionSuccess implements Action{
+  type: ProductsActionsTypes=ProductsActionsTypes.UPDATE_PRODUCT_SUCCESS;
+  constructor(public payload:Product) {
+  }
+}
+
+export class UpdateProductActionError implements Action{
+  type: ProductsActionsTypes=ProductsActionsTypes.UPDATE_PRODUCT_ERROR;
+  constructor(public payload:string) {
+  }
+}
+
 export type ProductsActions=
     GetAllProductsAction | GetAllProductsActionSuccess | GetAllProductsActionError
     | GetSelectedProductsAction | GetSelectedProductsActionSuccess | GetSelectedProductsActionError
@@ -185,4 +234,7 @@ export type ProductsActions=
     | SelectProductAction | SelectProductActionSuccess | SelectProductActionError
     | DeleteProductAction | DeleteProductActionSuccess | DeleteProductActionError
     | NewProductAction | NewProductActionSuccess | NewProductActionError
+    | SaveProductAction | SaveProductActionSuccess | SaveProductActionError
+    | EditProductAction | EditProductActionSuccess | EditProductActionError
+    | UpdateProductAction | UpdateProductActionSuccess | UpdateProductActionError
 ;

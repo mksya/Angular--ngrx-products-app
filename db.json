@@ -22,6 +22,21 @@
       "quantity": "10",
       "selected": true,
       "id": 4
+    },
+    {
+      "name": "USB key",
+      "price": "50",
+      "quantity": "99",
+      "selected": true,
+      "id": 5
+    },
+    {
+      "id": 6,
+      "name": "Lenovo",
+      "price": "800",
+      "quantity": "3",
+      "selected": true,
+      "available": null
     }
   ]
 }
